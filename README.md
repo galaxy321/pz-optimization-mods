@@ -82,3 +82,11 @@ These mods are tested in singleplayer on Build 42.20 and later. None of them is 
 **Multiplayer.** This hasn't been tested. For a dedicated server, the mods have to be on the server and every client. Add their IDs (`ChunkLoadSieve;UIThrottle;HitchFix;LGEPChunkLoadPatch`) to the server's `Mods=` line. Because they are local mods, you would need to upload them to the Workshop yourself for other players to download, and credit the authors of the mods they patch.
 
 The `mock_test.py` scripts run the patches against stand-ins for the real mod files, using `lupa` (`pip install lupa`).
+
+## Contributing
+
+`CLAUDE.md` explains how the patches work, how to test and measure them, and which costs are still worth looking at. It is written so that Claude Code, or a person, can pick the work up on their own machine.
+
+## License
+
+Public domain, under [The Unlicense](LICENSE). Use, copy, change, re-upload or include these in your own mods or modpacks, with or without credit. The mods they patch belong to their own authors and are not covered by this.
