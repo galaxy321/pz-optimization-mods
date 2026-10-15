@@ -29,7 +29,7 @@ The patch leaves these alone: DAMN_Spawns, FittedBarricades, FittedSheets (their
 ## Install
 Copy the `ChunkLoadSieve` folder to `%USERPROFILE%\Zomboid\mods\`, then enable "Chunk Load Sieve" in the Mods menu. Load order doesn't matter: the file name sorts it ahead of the mods it patches.
 
-To check it is working, look in `console.txt` for `[ChunkLoadSieve] active, N handlers captured: ...`. Every 2 minutes it also prints how many squares loaded and how many times each caught handler was actually called.
+To check it is working, look in `console.txt` for `[ChunkLoadSieve] active (1.2), N handlers captured: ...`. Every 2 minutes it also prints how many squares loaded and how many times each caught handler was actually called.
 
 To turn it off, disable the mod. Alternatively, set `ENABLED = false` at the top of `!!!_ChunkLoadSieve.lua`.
 
