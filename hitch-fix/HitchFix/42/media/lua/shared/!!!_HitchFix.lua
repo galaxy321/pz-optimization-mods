@@ -21,6 +21,12 @@
 --    Chunk Load Sieve as chunks load (no extra cost per square), when an object is placed, and by
 --    a slow rescan around the player spread one row per tick.
 --
+-- 4. Night Vision Framework checks your worn items every 30 player updates to see whether one is
+--    night-vision goggles. For every worn item it makes a dozen Java calls and string searches,
+--    about 1.8 ms per check with a full outfit, even with no goggles anywhere. Whether an item
+--    is goggles depends only on its item type, so here the answer is remembered per type, and
+--    forgotten whenever a mod registers a new goggle type.
+--
 -- The handlers are caught as they register (by file name), the same way as Chunk Load Sieve.
 -- The file name sorts after "!!!_ChunkLoadSieve.lua" and before every patched mod's files.
 --
@@ -32,6 +38,7 @@ local H = HitchFix
 local ENABLE_AMMO = true
 local ENABLE_FARMING = true
 local ENABLE_RACKS = true
+local ENABLE_NV = true
 
 local AMMO_PER_TICK = 200   -- casing entries looked at per tick
 local PLANTS_PER_TICK = 20  -- plants checked per tick
@@ -409,6 +416,49 @@ if ENABLE_RACKS then
 	end
 end
 
+-- 4. Night Vision Framework --------------------------------------------------------------------
+
+local nvStats = { types = 0 }
+
+local function patchNV()
+	local S = NV and NV.Shared
+	if not ENABLE_NV or type(S) ~= "table" or S.__hitchFix then return end
+	local orig = S.IsNVTaggedItem
+	if type(orig) ~= "function" then return end
+	-- only the framework's own function, not one another mod put in its place
+	if not endsWith(fileOf(orig), "nvframework_shared.lua") then
+		say("night vision left alone: IsNVTaggedItem comes from " .. tostring(fileOf(orig)))
+		return
+	end
+	S.__hitchFix = true
+	local byType = {}  -- full type -> true / false
+	S.IsNVTaggedItem = function(item)
+		if not item then return false end
+		local ft = type(item.getFullType) == "function" and item:getFullType() or nil
+		if not ft then return orig(item) end
+		local v = byType[ft]
+		if v == nil then
+			v = orig(item) and true or false
+			byType[ft] = v
+			nvStats.types = nvStats.types + 1
+		end
+		return v
+	end
+	-- a new goggle type, or the framework clearing its own cache, makes every answer stale
+	local function forgetting(name)
+		local f = S[name]
+		if type(f) ~= "function" then return end
+		S[name] = function(...)
+			byType = {}
+			nvStats.types = 0
+			return f(...)
+		end
+	end
+	forgetting("RegisterNightVisionItem")
+	forgetting("ClearScriptNightVisionCache")
+	say("night vision goggle check remembered per item type")
+end
+
 -- Driver ------------------------------------------------------------------------------------
 
 local tick = 0
@@ -425,20 +475,21 @@ local function onTick()
 	if not lastStats then lastStats = t return end
 	if t - lastStats >= 600000 then
 		lastStats = t
-		say(string.format("casings: %d entries, %d removed in %d passes; farming: %d plants, %d passes; racks known: %d",
-			ammoStats.entries, ammoStats.removed, ammoStats.passes, farmStats.plants, farmStats.passes, rackCount))
+		say(string.format("casings: %d entries, %d removed in %d passes; farming: %d plants, %d passes; racks known: %d; night vision item types: %d",
+			ammoStats.entries, ammoStats.removed, ammoStats.passes, farmStats.plants, farmStats.passes, rackCount, nvStats.types))
 	end
 end
 
 local function onStart()
 	patchFarming()
+	patchNV()
 	local caught = {}
 	for name, list in pairs(wants) do
 		for _, w in ipairs(list) do
 			if w.fn then caught[#caught + 1] = w.file end
 		end
 	end
-	say("active (1.0), caught: " .. (#caught > 0 and table.concat(caught, ", ") or "nothing")
+	say("active (1.1), caught: " .. (#caught > 0 and table.concat(caught, ", ") or "nothing")
 		.. (ChunkLoadSieve and ChunkLoadSieve.watch and "; racks found by Chunk Load Sieve" or "; racks found by rescan only"))
 end
 

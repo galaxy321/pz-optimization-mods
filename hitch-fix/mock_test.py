@@ -55,6 +55,26 @@ function SFarmingSystem:getLuaObjectByIndex(i) return self.objs[i] end
 function SFarmingSystem:getLuaObjectAt(x,y,z) for _,o in ipairs(self.objs) do if o.x==x and o.y==y and o.z==z then return o end end return nil end
 function SFarmingSystem:remove(o) for i=#self.objs,1,-1 do if self.objs[i]==o then table.remove(self.objs,i) end end end
 ''')
+NVF = modfile('NVFramework/common/media/lua/shared/nvframework_shared.lua', r'''
+NV = NV or {}; NV.Shared = NV.Shared or {}
+local REG = {}
+NV_ORIG_CALLS = 0
+function NV.Shared.IsNVTaggedItem(item)
+  NV_ORIG_CALLS = NV_ORIG_CALLS + 1
+  if not item or not item.getType then return false end
+  return REG[item:getFullType()] == true or string.find(item:getType(), "NVG", 1, true) ~= nil
+end
+function NV.Shared.RegisterNightVisionItem(ft) REG[ft] = true; return true end
+function NV.Shared.ClearScriptNightVisionCache() return true end
+function NV.GetWornNVItem(player)
+  local worn = player:getWornItems()
+  for i = 0, worn:size() - 1 do
+    local item = worn:get(i)
+    if NV.Shared.IsNVTaggedItem(item) then return item end
+  end
+  return nil
+end
+''')
 
 MOCK = r'''
 local function newEvent()
@@ -103,6 +123,10 @@ function addObj(sq, sprName, props)
   o.getSquare=function() return sq end
   table.insert(sq.objs, o); return o
 end
+function item(ft)
+  local t = ft:match("%.(.*)$")
+  return {getFullType=function() return ft end, getType=function() return t end}
+end
 function addCasing(sq, typ)
   local wo = {}
   wo.getItem=function() return {getType=function() return typ end} end
@@ -131,7 +155,7 @@ def run(with_sieve):
     L.execute(MOCK)
     if with_sieve: L.execute(f'dofile([[{SIEVE}]])')
     L.execute(f'dofile([[{FIX}]])')
-    for p in (AMMO, GUN, ER, OTHER, FARM):
+    for p in (NVF, AMMO, GUN, ER, OTHER, FARM):
         L.execute(f'dofile([[{p}]])')
     return L
 
@@ -224,6 +248,22 @@ for with_sieve in (True, False):
     L.execute('PX,PY=-20.5,20.5; GUN_TICKS=0; addObj(sqAt(-22,22,0) or makeSquare(-22,22,0), "tuna_weaponrack_01_6")')
     for _ in range(700): L.execute('Events.OnTick.trigger()')
     check('a rack with no event is found by the rescan', L.eval('GUN_TICKS') > 31)
+
+    # night vision: 20 worn items, no goggles, checked 100 times
+    L.execute('''
+      WORN = {}
+      for i=1,20 do WORN[i] = item("Base.Shirt" .. i) end
+      NVP = {getWornItems=function() return jlist(WORN) end}
+      NV_ORIG_CALLS = 0
+      for i=1,100 do NV_FOUND = NV.GetWornNVItem(NVP) end
+    ''')
+    check('night vision: no goggles found among ordinary clothes', L.eval('NV_FOUND') is None)
+    check('night vision: each item type looked up once (20, not 2000)', L.eval('NV_ORIG_CALLS') == 20)
+    L.execute('WORN[21] = item("Base.Hat_NVG_ON"); NV_FOUND = NV.GetWornNVItem(NVP)')
+    check('night vision: goggles put on are found', L.eval('NV_FOUND and NV_FOUND.getType()') == 'Hat_NVG_ON')
+    L.execute('WORN[21] = item("Mod.Monocle"); NV.Shared.RegisterNightVisionItem("Mod.Monocle"); NV_FOUND = NV.GetWornNVItem(NVP)')
+    check('night vision: a type registered later is found (answers forgotten)', L.eval('NV_FOUND and NV_FOUND.getType()') == 'Monocle')
+    check('night vision: nil item is not goggles', L.eval('NV.Shared.IsNVTaggedItem(nil)') == False)
 
 print()
 print('ALL PASS' if not failures else f'{len(failures)} FAILED: {failures}')

@@ -1,5 +1,5 @@
 name=Hitch Fix (performance patch)
 id=HitchFix
-description=Unofficial performance patch. Spreads AmmoMaker's casing clean-up and vanilla farming's plant checks over several ticks instead of one frozen frame every ten in-game minutes, drops casing entries that have nothing left to clean, and holds back Tuna's gun and equipment rack scans while no rack is near. Works best with Chunk Load Sieve 1.2. Does not modify any other mod's files.
-modversion=1.0.0
+description=Unofficial performance patch. Spreads AmmoMaker's casing clean-up and vanilla farming's plant checks over several ticks instead of one frozen frame every ten in-game minutes, drops casing entries that have nothing left to clean, and holds back Tuna's gun and equipment rack scans while no rack is near, and remembers which item types are night-vision goggles for Night Vision Framework. Works best with Chunk Load Sieve 1.2. Does not modify any other mod's files.
+modversion=1.1.0
 versionMin=42.0.0
