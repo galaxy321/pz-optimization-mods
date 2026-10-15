@@ -4,9 +4,9 @@ A performance patch for galaxy321's Lumberjack save. It removes three periodic f
 
 | What | Before | After |
 |---|---|---|
-| AmmoMaker casing clean-up (`server/ammomaker_itemCleanUp.lua`) | 24 to 37 ms in one frame every 10 in-game minutes. The list grows forever, because an entry whose casing was picked up is never removed. | 200 entries per tick. Each entry string is parsed once. Entries with nothing left to clean are dropped. |
+| [AmmoMaker](https://steamcommunity.com/sharedfiles/filedetails/?id=2788256295) casing clean-up (`server/ammomaker_itemCleanUp.lua`) | 24 to 37 ms in one frame every 10 in-game minutes. The list grows forever, because an entry whose casing was picked up is never removed. | 200 entries per tick. Each entry string is parsed once. Entries with nothing left to clean are dropped. |
 | Vanilla farming `SFarmingSystem:checkPlant` | About 30 ms in one frame every 10 in-game minutes, on the same frame as AmmoMaker. | 20 plants per tick. The checks are unchanged and run in the same order. A pass still running is finished before the next one starts. |
-| Tuna gun racks and equipment racks `OnTick` sweeps | About 11 ms/s, in 2 to 3 ms bursts twice a second, even with no rack near. | Their handlers run only within 9 squares of a known rack. Chunk Load Sieve 1.2 notes rack squares as chunks load. Racks are also picked up when one is placed (`OnObjectAdded`), and a slow rescan runs one row per tick. |
+| Tuna [gun racks](https://steamcommunity.com/sharedfiles/filedetails/?id=3784677588) and [equipment racks](https://steamcommunity.com/sharedfiles/filedetails/?id=3793403177) `OnTick` sweeps | About 11 ms/s, in 2 to 3 ms bursts twice a second, even with no rack near. | Their handlers run only within 9 squares of a known rack. Chunk Load Sieve 1.2 notes rack squares as chunks load. Racks are also picked up when one is placed (`OnObjectAdded`), and a slow rescan runs one row per tick. |
 
 ## Install
 

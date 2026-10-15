@@ -9,22 +9,22 @@ This patch catches those functions when they register and keeps them off the eve
 
 | Mod file | Called only when the square has |
 |---|---|
-| OnanGenSet/OnanServer.lua | a generator, or an Onan engine-half sprite |
+| OnanGenSet/OnanServer.lua ([Onan GenSet](https://steamcommunity.com/sharedfiles/filedetails/?id=3812222734)) | a generator, or an Onan engine-half sprite |
 | OnanGenSet/OnanSound.lua | a generator |
-| GasPumpIndicator.lua | a gas pump sprite |
-| LGExtendedPlumbing/LGEPClient.lua | an object with mod data, or the LGEP ghost sprite |
-| LGExtendedElectricity/LGEEGrid.lua | a generator, or an object with mod data |
+| GasPumpIndicator.lua ([Gas Pump Indicator](https://steamcommunity.com/sharedfiles/filedetails/?id=3755993986)) | a gas pump sprite |
+| LGExtendedPlumbing/LGEPClient.lua ([LG Extended Plumbing](https://steamcommunity.com/sharedfiles/filedetails/?id=3779561845)) | an object with mod data, or the LGEP ghost sprite |
+| LGExtendedElectricity/LGEEGrid.lua ([LG Extended Electricity](https://steamcommunity.com/sharedfiles/filedetails/?id=3779562002)) | a generator, or an object with mod data |
 | LGExtendedElectricity/LGEEAgree.lua | a generator (only registers in multiplayer) |
-| PZM_Puker_Decals.lua (PZ The Mutants) | an object with mod data (puke always saves its expiry there) |
-| vfx_agingmanager.lua (VFE) | ground items or a container |
+| PZM_Puker_Decals.lua ([PZ The Mutants](https://steamcommunity.com/sharedfiles/filedetails/?id=3796669056)) | an object with mod data (puke always saves its expiry there) |
+| vfx_agingmanager.lua ([Vanilla Foods Expanded](https://steamcommunity.com/sharedfiles/filedetails/?id=3577903007)) | ground items or a container |
 | vfx_storydistribution.lua (VFE) | a container |
 | vfx_birthday_world.lua / vfx_birthday.lua (VFE) | ground items |
-| qolc_reasonable_alarms.lua (QoL Compendium) | doors or windows (special objects), or a vehicle |
-| TABAS_STubFluidContainerSystem.lua | a square in its tub registry |
+| qolc_reasonable_alarms.lua ([QoL Compendium](https://steamcommunity.com/sharedfiles/filedetails/?id=3781012462)) | doors or windows (special objects), or a vehicle |
+| TABAS_STubFluidContainerSystem.lua ([Take A Bath And Shower](https://steamcommunity.com/sharedfiles/filedetails/?id=3592172476)) | a square in its tub registry |
 
 Each condition comes from reading that mod's handler. One exception: Mutants puke that somehow has no saved expiry is no longer given one when its chunk loads. It is the minimum the handler needs before it does anything, so skipping a square changes nothing for that mod.
 
-The patch leaves these alone: DAMN_Spawns, FittedBarricades, FittedSheets (their source wasn't available), every other event, and LoadChunk.
+The patch leaves these alone: DAMN_Spawns ([damnlib](https://steamcommunity.com/sharedfiles/filedetails/?id=3171167894)), [FittedBarricades](https://steamcommunity.com/sharedfiles/filedetails/?id=3795414660), [FittedSheets](https://steamcommunity.com/sharedfiles/filedetails/?id=3794207681) (their source wasn't available), every other event, and LoadChunk.
 
 ## Install
 Copy the `ChunkLoadSieve` folder to `%USERPROFILE%\Zomboid\mods\`, then enable "Chunk Load Sieve" in the Mods menu. Load order doesn't matter: the file name sorts it ahead of the mods it patches.
