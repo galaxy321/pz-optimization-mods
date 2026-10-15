@@ -92,10 +92,12 @@ local function throttleLootRefresh(cls, label)
 				if self.lastDir ~= dir or self.lastSquare ~= sq then
 					local vehicle = p:getVehicle()
 					local skip = false
+					local seat = vehicle and vehicle:getSeat(p) or nil
 					if vehicle then
-						-- In a vehicle the loot window lists that vehicle's own containers, which
-						-- moving does not change.
-						skip = (self.__uitVehicle == vehicle)
+						-- In a vehicle the loot window lists the containers of that vehicle that
+						-- the current seat can reach (the glove box only from the front, for
+						-- example), which driving does not change. A new seat still rebuilds.
+						skip = (self.__uitVehicle == vehicle) and (self.__uitSeat == seat)
 						self.__uitSig = nil
 					elseif self.__uitVehicle == nil then
 						local new = self.__uitNew or {}
@@ -107,6 +109,7 @@ local function throttleLootRefresh(cls, label)
 						self.__uitSig = nil
 					end
 					self.__uitVehicle = vehicle or nil
+					self.__uitSeat = seat
 					if skip then
 						-- Nothing to loot changed: hide the move from the original.
 						self.lastDir, self.lastSquare = dir, sq

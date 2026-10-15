@@ -58,13 +58,22 @@ P.dir="N"; step(); turnEmpty=refreshes
 -- turn while next to the crate
 P.x=24; step(); P.dir="E"; step(); turnNearCrate=refreshes
 -- driving: enter a vehicle, cross 100 squares, exit
-refreshes=0; P.veh={}
+refreshes=0; P.veh={getSeat=function() return 0 end}
 for x=41,140 do P.x=x; step() end
 P.veh=nil; P.x=141; step()
 driveRefreshes=refreshes
+-- switching seats in a parked car: the reachable containers change, so it must rebuild
+refreshes=0; P.seat=0; P.veh={getSeat=function() return P.seat end}
+step(); P.dir="S"; step()
+P.seat=1; P.x=P.x+1; step()
+seatRefreshes=refreshes
+P.veh=nil; P.seat=nil
 for f=1,600 do advance(16.7); ExactMinuteClock.updateState({}) end
 ''')
 g=L.globals()
 print("walk 30 squares on an empty street with one crate beside it: rebuilds", g.walkRefreshes, "per step:", list(g.log.values()))
 print("turn in place on empty street: total now", g.turnEmpty, "| step next to crate then turn there:", g.turnNearCrate)
 print("drive 100 squares then get out: rebuilds", g.driveRefreshes)
+print("get in a parked car, turn, switch seat: rebuilds", g.seatRefreshes)
+assert g.driveRefreshes == 2 and g.seatRefreshes == 2, "vehicle rebuild counts changed"
+print("ALL OK")
