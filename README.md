@@ -22,7 +22,7 @@ These numbers come from Lua Event Profiler runs on one heavily modded B42 save. 
 | LG Extended Plumbing Chunk Load Patch | about 20 µs per loading square for the server-side scan (the plumbing mod's own estimate) | Scans run in full only near plumbing, at most 2 ms per tick | Not profiled separately. It was installed before the profiler existed. |
 | Lua Event Profiler | none | adds about 5 to 9 ms/s, plus a 140 to 290 ms hitch every 30 s when it writes its report | A diagnostic tool. Turn it off when you aren't measuring. |
 
-Settings were changed alongside the patches on that save, so whole-game fps was not compared: the UI frame rate (`uiRenderFPS`) went from 60 to 15, and Immersive Snow's low-end mode was turned on.
+Game and mod settings changed during the same testing on that save, for example the UI frame rate (`uiRenderFPS`) went from 60 to 15, so whole-game fps is not compared here.
 
 Install a mod by copying its inner folder (for example `ChunkLoadSieve`) to `%USERPROFILE%\Zomboid\mods\`, then enable it in the Mods menu. Each folder's README has the details.
 
