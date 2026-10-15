@@ -1,0 +1,6 @@
+name=LG Extended Plumbing - Chunk Load Patch
+id=LGEPChunkLoadPatch
+require=\LGExtendedPlumbing
+description=Unofficial performance patch for LG Extended Plumbing. Instead of scanning every square inside the LoadGridsquare event (which runs while the server is loading the chunk), it queues each loaded chunk and scans it on later ticks under a small time budget. Only chunks near plumbing (mirrors, plumbed barrels, pipes) are scanned, in full as before; everywhere else is skipped, since nothing can matter until a barrel is plumbed in. A barrel plumbed before installing this patch, far from any mirror or pipe, is picked up by unplumbing and plumbing it again. Does not modify the original mod's files.
+modversion=1.2.0
+versionMin=42.20.0
