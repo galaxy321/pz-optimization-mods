@@ -1,0 +1,5 @@
+name=Lua Event Profiler 2 (diagnostic, low overhead)
+id=LuaEventProfiler2
+description=Diagnostic only. Same report as Lua Event Profiler, built to disturb the game less: cheap, frequent handlers are timed on a sample of calls, and the 30-second report is put together and written a slice at a time over the following ticks instead of in one frame. It also lists the cost by category (tick, player update, render, chunk load, UI draw and so on) with the costliest mods in each. Enable this or Lua Event Profiler, not both (if both are on, the one that loads first runs and the other stands down). Disable it when you are done.
+modversion=2.5.0
+versionMin=42.20.0

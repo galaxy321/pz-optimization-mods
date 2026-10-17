@@ -9,6 +9,7 @@ These are small, unofficial patch mods for Project Zomboid Build 42. They cut th
 | `hitch-fix` | Hitch Fix | Spreads [AmmoMaker](https://steamcommunity.com/sharedfiles/filedetails/?id=2788256295)'s casing clean-up and vanilla farming's plant checks over several ticks. It also remembers Night Vision Framework's goggle check per item type, and holds back the Tuna rack scans ([gun racks](https://steamcommunity.com/sharedfiles/filedetails/?id=3784677588), [equipment racks](https://steamcommunity.com/sharedfiles/filedetails/?id=3793403177)) while no rack is near. |
 | `lgep-chunk-load-patch` | LG Extended Plumbing Chunk Load Patch | Cuts the lag [LG Extended Plumbing](https://steamcommunity.com/sharedfiles/filedetails/?id=3779561845) causes while chunks load, which is most noticeable when driving. It also lives in its own repo, [pz-lgep-chunk-load-patch](https://github.com/galaxy321/pz-lgep-chunk-load-patch). |
 | `lua-event-profiler` | Lua Event Profiler | A diagnostic mod. It times every Lua event handler and UI method by mod, and prints a report every 30 s. Turn it off when you aren't measuring, because the report itself causes a hitch. |
+| `lua-event-profiler/LuaEventProfiler2` | Lua Event Profiler 2 | The same report with less disturbance: cheap, frequent handlers are timed on 1 call in 8, the report is written a slice at a time, and costs are also listed by category. 2.5 counts self time (a timed call inside another is counted once) and keeps Add/Remove behaving as without the profiler. Enable this or version 1, not both. |
 
 ## Measured savings
 
@@ -62,7 +63,7 @@ These mods are tested in singleplayer on Build 42.20 and later. None of them is 
    | `ui-throttle` | `UIThrottle` |
    | `hitch-fix` | `HitchFix` |
    | `lgep-chunk-load-patch` | `LGEPChunkLoadPatch` (needs LG Extended Plumbing) |
-   | `lua-event-profiler` | `LuaEventProfiler` (optional, only for measuring) |
+   | `lua-event-profiler` | `LuaEventProfiler` or `LuaEventProfiler2` (optional, only for measuring; pick one) |
 
    You should end up with paths like `Zomboid\mods\ChunkLoadSieve\42\mod.info`. Don't copy the repo folder itself.
 3. **Enable.** Start the game, open **Mods**, and tick the ones you copied. Load order doesn't matter, because each one names its file so it loads before the mods it patches. For an existing save, also enable them in the save's own mod list when you load it.
