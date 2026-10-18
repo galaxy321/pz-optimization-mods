@@ -1,0 +1,13 @@
+{
+    "Sandbox_Crane": "Crane",
+    "Sandbox_Crane_BoxCapacity": "Box Capacity",
+    "Sandbox_Crane_BoxCapacity_tooltip": "How much the crane box holds.",
+    "Sandbox_Crane_WinchWeldingLevel": "Winch Metalworking Level",
+    "Sandbox_Crane_WinchWeldingLevel_tooltip": "Metalworking level needed to build the crane winch.",
+    "Sandbox_Crane_BoxWoodworkLevel": "Box Carpentry Level",
+    "Sandbox_Crane_BoxWoodworkLevel_tooltip": "Carpentry level needed to build the crane box.",
+    "Sandbox_Crane_CrankBaseTime": "Crank Base Time",
+    "Sandbox_Crane_CrankBaseTime_tooltip": "Action time to raise or lower an empty box.",
+    "Sandbox_Crane_CrankTimePerWeight": "Crank Time per Weight",
+    "Sandbox_Crane_CrankTimePerWeight_tooltip": "Extra action time for each unit of weight in the box."
+}

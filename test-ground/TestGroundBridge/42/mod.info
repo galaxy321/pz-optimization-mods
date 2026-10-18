@@ -1,0 +1,6 @@
+name=Test Ground Bridge (dev tool)
+id=TestGroundBridge
+require=\TestGround
+description=Lets tools and AI agents drive Test Ground from outside the game. Once a second it reads Zomboid/Lua/TestGround_cmd.txt, runs each line as a Test Ground command (run, survey, baseline, fight, treescan, stop, status) and appends the replies to Zomboid/Lua/TestGround_out.txt. It also runs "lua <code>" lines, but only when the game runs with -debug or the save's sandbox option "allow lua lines" is on; each one is logged to Zomboid/Lua/TestGround_bridge_lua.txt. Install it only on a machine you control, for building and testing mods. Singleplayer only.
+modversion=1.1.0
+versionMin=42.0.0

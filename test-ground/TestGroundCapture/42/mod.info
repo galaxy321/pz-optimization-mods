@@ -1,0 +1,8 @@
+name=Test Ground Capture (ZombieBuddy)
+id=TestGroundCapture
+description=Test Ground submod. Takes Test Ground's screenshots without the game window having to be on screen: the frame read from the back buffer just before it is shown (covered windows are fine), or, while the window is minimised, the game world read from its offscreen buffer with the drive view drawn on top. It can also film: frames from the back buffer at a set fps, written as JPEGs for the showcase film. The game's own screenshot copies what is on the screen, so a covered or minimised window gives a blank picture. Needs Test Ground and ZombieBuddy.
+modversion=1.0.7
+versionMin=42.0.0
+require=\TestGround,ZombieBuddy
+javaJarFile=media/java/tgcapture.jar
+javaPkgName=pzmod.tgcapture

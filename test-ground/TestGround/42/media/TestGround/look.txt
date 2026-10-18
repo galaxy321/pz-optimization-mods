@@ -1,0 +1,20 @@
+# Test Ground look-round check (1.13.19), shipped with the mod (media/TestGround/look.txt): standing
+# at the fixed start, still, then looking round two full circles by turning the character and by
+# moving the mouse, then still again, so the look steps can be compared with standing still in the
+# same view. Run it once per view: autorun "plan = mod:look" with "viewpoint = third" or
+# "viewpoint = first" (no viewpoint line: isometric). The plan has no viewpoint line of its own, so
+# the flag picks the view.
+label = look
+settle = 20
+repeat = 1
+return = 1
+start = westpoint
+time = 12
+weather = clear
+zombies = none
+god = 1
+
+step = idle 20 look_still
+step = look 30 look_facing
+step = look 30 look_mouse
+step = idle 10 look_after
