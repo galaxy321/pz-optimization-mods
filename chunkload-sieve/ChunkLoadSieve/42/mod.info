@@ -1,5 +1,5 @@
 name=Chunk Load Sieve (performance patch)
 id=ChunkLoadSieve
-description=Unofficial performance patch. Several mods run a Lua handler on every square of every chunk that loads, mostly to look for one kind of object. This patch catches those handlers when they register and calls each one only on squares where it can do something (a generator, a gas pump, a container, mod data, and so on), from one shared handler instead of ten. Does not modify any other mod's files. Mods that are not installed are simply skipped.
-modversion=1.2.0
+description=Unofficial performance patch. Also stops LG Extended Electricity re-working its grid for chunks far from any generator, and moves LG Extended Plumbing's square scan out of chunk loading into a small per-tick budget, only near plumbing (replaces the LGEP Chunk Load Patch mod). Several mods run a Lua handler on every square of every chunk that loads, mostly to look for one kind of object. This patch catches those handlers when they register and calls each one only on squares where it can do something (a generator, a gas pump, a container, mod data, and so on), from one shared handler instead of ten. Does not modify any other mod's files. Mods that are not installed are simply skipped. 1.7 lists every chunk-load handler in the console and can run in a measuring mode; 1.8 also skips some mods' object-removal handlers for trees and bushes the game regrows as chunks load (see the README).
+modversion=1.8.0
 versionMin=42.0.0
