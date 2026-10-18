@@ -14,10 +14,15 @@
 --    whole inventory) on every rendered frame to find the watch. This runs it at most every
 --    CLOCK_MS; the clock still draws every frame from the last result.
 --
+-- 3. Take A Bath And Shower's grime moodle: see shared/!!!_UIThrottle.lua, which has to load
+--    before that mod's client files to catch its handler.
+--
 
 if UIThrottle then return end
 UIThrottle = {}
 
+local ENABLE_LOOT_WINDOW = true  -- part 1
+local ENABLE_CLOCK = true        -- part 2
 local CLOCK_MS = 200
 
 local now = getTimestampMs
@@ -28,6 +33,7 @@ local now = getTimestampMs
 -- squares add nothing, so walking down an empty street gives the same (empty) list every step.
 local function footSignature(p, out)
 	local n = 0
+	local nearVehicle = false
 	local cell = getCell()
 	local cur = p:getCurrentSquare()
 	local x, y, z = p:getX(), p:getY(), p:getZ()
@@ -53,7 +59,7 @@ local function footSignature(p, out)
 					end
 				end
 				local v = gs:getVehicleContainer()
-				if v then n = n + 1; out[n] = v end
+				if v then n = n + 1; out[n] = v; nearVehicle = true end
 				if n > start then
 					-- Something lootable here: which square it is, and whether a wall is in the way.
 					n = n + 1; out[n] = gs
@@ -61,6 +67,12 @@ local function footSignature(p, out)
 				end
 			end
 		end
+	end
+	if nearVehicle then
+		-- Which of a parked vehicle's containers the window lists depends on where you stand
+		-- next to it (vanilla asks vehicle:canAccessContainer per part), so beside a vehicle
+		-- every step rebuilds, as in vanilla. (1.1.2)
+		n = n + 1; out[n] = cur or false
 	end
 	if n > 0 then
 		-- Facing picks which nearby container is selected, as in vanilla, so it only matters
@@ -85,6 +97,10 @@ local function throttleLootRefresh(cls, label)
 	if type(orig) ~= "function" then return false end
 
 	cls.update = function(self, ...)
+		-- A subclass whose update calls its parent's (both wrapped) must not be judged twice: the
+		-- inner call would see the signature the outer one just saved and hide the move. CleanUI
+		-- 42.19's two classes don't do this; other inventory mods might. (1.1.2)
+		if self.__uitIn then return orig(self, ...) end
 		if not self.onCharacter then
 			local p = getSpecificPlayer(self.player)
 			if p then
@@ -117,12 +133,16 @@ local function throttleLootRefresh(cls, label)
 				end
 			end
 		end
-		return orig(self, ...)
+		self.__uitIn = true
+		orig(self, ...)
+		self.__uitIn = nil
 	end
 	cls.__uiThrottled = true
 	print("[UIThrottle] loot window skips rebuilds when nothing nearby changed (" .. label .. ")")
 	return true
 end
+
+UIThrottle._throttle = throttleLootRefresh  -- for the mock test
 
 local function throttleClock()
 	local C = ExactMinuteClock
@@ -141,12 +161,18 @@ local function throttleClock()
 end
 
 local function install()
-	throttleLootRefresh(ISInventoryPage, "ISInventoryPage")
-	throttleLootRefresh(CleanUI_Vanilla_ISInventoryPage, "CleanUI_Vanilla_ISInventoryPage")
-	throttleClock()
+	if ENABLE_LOOT_WINDOW then
+		throttleLootRefresh(ISInventoryPage, "ISInventoryPage")
+		throttleLootRefresh(CleanUI_Vanilla_ISInventoryPage, "CleanUI_Vanilla_ISInventoryPage")
+	end
+	if ENABLE_CLOCK then throttleClock() end
 end
 
-Events.OnGameStart.Add(install)
+Events.OnGameStart.Add(function()
+	print("[UIThrottle] active (1.1.2)" .. (UIThrottleEarly and UIThrottleEarly.tabas
+		and ", Take A Bath And Shower grime moodle throttled" or ""))
+	install()
+end)
 
 -- CleanUI can load its other inventory class later, when its UI mode is switched; pick it up then.
 local ticks = 0
