@@ -1,5 +1,5 @@
 name=Lua Event Profiler (diagnostic)
 id=LuaEventProfiler
 description=Diagnostic only. Times every Lua event handler (OnTick, OnPlayerUpdate, LoadGridsquare, LoadChunk, OnRenderTick and the rest) and every Lua UI element's render/prerender, grouped by the mod file that registered it. Prints the top costs to console.txt every 30 seconds and writes the latest report to Zomboid/Lua/LuaEventProfiler.txt. Adds a little overhead itself, so disable it when you are done.
-modversion=1.3.0
+modversion=1.4.0
 versionMin=42.20.0

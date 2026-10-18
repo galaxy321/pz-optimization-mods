@@ -18,6 +18,9 @@ if LuaEventProfiler then return end
 LuaEventProfiler = {}
 local P = LuaEventProfiler
 P.originalOf = setmetatable({}, { __mode = "k" })  -- timed wrapper -> handler, for other patches
+-- Another patch that registers its own wrapper around a mod's handler sets sourceOf[wrapper] = handler,
+-- so the time is still reported under the mod that wrote the handler.
+P.sourceOf = setmetatable({}, { __mode = "k" })
 
 local REPORT_SECONDS = 30
 local TOP = 20
@@ -38,7 +41,7 @@ local sessionStart = windowStart
 local totals = {}      -- key -> { label, mod, ms, calls } over the whole session
 
 local function fileOf(fn)
-	local ok, name = pcall(getFilenameOfClosure, fn)
+	local ok, name = pcall(getFilenameOfClosure, P.sourceOf[fn] or fn)
 	if ok and name then return tostring(name) end
 	return nil
 end
@@ -282,14 +285,14 @@ local function tick()
 	end
 	lastTick = t
 	frameLua, frameWorst, frameWorstMs = 0, nil, 0
-	if t - windowStart >= REPORT_SECONDS * 1000 then
+	if not P.quiet and t - windowStart >= REPORT_SECONDS * 1000 then
 		spikeCount = 0
 		report()
 	end
 end
 
 wrapAllEvents()
-print("[LuaEventProfiler] wrapping Events.*.Add")
+print("[LuaEventProfiler] active (1.4.0), wrapping Events.*.Add")
 
 -- Our own hooks go through the wrapped Add too; they are tagged as LuaEventProfiler and cost
 -- next to nothing, so they are left in the list as a baseline.
@@ -306,3 +309,38 @@ end)
 Events.OnTick.Add(tick)
 
 P.report = report
+
+-- For Test Ground (and other benches): P.quiet = true stops the 30 s report, so its hitch doesn't
+-- land inside a measured step. P.takeWindow(seconds) folds the current window into the session
+-- totals, resets it, and returns the window's report lines (top mods, top handlers).
+P.quiet = false
+function P.takeWindow(seconds)
+	local t = now()
+	seconds = seconds or (t - windowStart) / 1000
+	local lines = {}
+	if seconds > 0 then
+		local total = 0
+		for _, s in pairs(stats) do total = total + s.ms end
+		lines[#lines + 1] = string.format("[LuaEventProfiler] Lua in handlers: %.1f ms/s", total / seconds)
+		lines[#lines + 1] = "[LuaEventProfiler] -- by mod --"
+		local mods = byMod(stats)
+		for i = 1, math.min(15, #mods) do lines[#lines + 1] = "[LuaEventProfiler] " .. fmt(mods[i], seconds) end
+		lines[#lines + 1] = "[LuaEventProfiler] -- by handler --"
+		local list = sorted(stats)
+		for i = 1, math.min(30, #list) do lines[#lines + 1] = "[LuaEventProfiler] " .. fmt(list[i], seconds) end
+	end
+	for key, s in pairs(stats) do
+		local tot = totals[key]
+		if not tot then
+			tot = { label = s.label, mod = s.mod, ms = 0, calls = 0 }
+			totals[key] = tot
+		end
+		tot.ms = tot.ms + s.ms
+		tot.calls = tot.calls + s.calls
+		if (s.max or 0) > (tot.max or 0) then tot.max = s.max end
+		s.ms, s.calls, s.max = 0, 0, 0
+	end
+	spikeCount = 0
+	windowStart = t
+	return lines
+end
