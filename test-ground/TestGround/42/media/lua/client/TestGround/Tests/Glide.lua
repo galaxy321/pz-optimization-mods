@@ -178,7 +178,7 @@ Steps.corpses = {
 K.CORPSE_MAX_S = 600
 
 -- 1.12.11, "station x,y,z [tag]" or "station spawn [type=Module.Name] [tag]": a crafting station's
--- using-player, for the Entity Loop Fix check. The game's UsingPlayerUpdateSystem clears an entity's
+-- using-player. The game's UsingPlayerUpdateSystem clears an entity's
 -- using player once the player is more than 10 tiles away; the patch replaces that per-frame loop. The
 -- step opens the station's entity window (or calls setUsingPlayer when there's no window to open),
 -- closes it, moves K.STATION_AWAY tiles off and waits K.STATION_WAIT_S seconds (wait=N), reading

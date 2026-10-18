@@ -1,4 +1,4 @@
--- Test Ground 1.13.0: the crafting-station check (Entity Loop Fix).
+-- Test Ground 1.13.0: the crafting-station check.
 require "TestGround/Core"
 local TG = TestGroundInternal
 if TG.loaded.Station then return end

@@ -1492,7 +1492,7 @@ LATE_GONE, LATE_N = LATE.gone == true, st.lateWrecks or 0
 check(_v[0] and _v[1] and _v[0].group(1) == _v[1].group(1), 'split: the entry file and Core carry the same VERSION (%s)' % [v and v.group(1) for v in _v])
 check(L.eval('LATE_GONE') and L.eval('LATE_N') == 1, 'drive: a wreck loaded after its row was cleared is taken off by the second look ahead')
 
-# 1.12.11: the station step (Entity Loop Fix check): put down a drying rack, open, close, move away, wait
+# 1.12.11: the station step: put down a drying rack, open, close, move away, wait
 L.execute(r'''
 local function list(t) return { size = function() return #t end, get = function(_, i) return t[i + 1] end } end
 ComponentType = { CraftBench = "CraftBench", DryingLogic = "DryingLogic", DryingCraftLogic = "DryingCraftLogic", FurnaceLogic = "FurnaceLogic" }

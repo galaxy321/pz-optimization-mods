@@ -27,7 +27,7 @@
 --                            # surveyed for another start is surveyed again.
 --   loads = 2                # 1.4.6: load the save this many times in one game session: after each run
 --                            # but the last, quit to the main menu (getCore():quit(), which saves) and load
---                            # it again (a mod's second-world-load bug, e.g. Animal Preload 0.2.1)
+--                            # it again (a mod's second-world-load bug)
 --   reloadplan = idle        # the plan for the loads after the first: idle (wait `delay` s, no run) or
 --                            # any plan name as for plan; default the same plan
 --   addmods = ModA,ModB      # before loading, add these mods to the save's own mod list (mods.txt);
