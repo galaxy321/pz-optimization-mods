@@ -10,6 +10,8 @@ A patch mod for the UI costs left after Chunk Load Sieve. It doesn't modify any 
 Each part has a switch at the top of its file: `ENABLE_LOOT_WINDOW` and `ENABLE_CLOCK` in `client/UIThrottle.lua`, `ENABLE_TABAS_MOODLE` in `shared/!!!_UIThrottle.lua`.
 
 ## Version history
+- 1.1.4: two fixes from a code review of 1.1.3. No `missed` line when `ENABLE_TABAS_MOODLE` is switched off. And the line no longer suggests moving UI Throttle in the mod list: the handler is matched only in Take A Bath And Shower's `client/` folder, which always loads after UI Throttle's `shared/` file, so a miss means the mod changed.
+- 1.1.3: if Take A Bath And Shower is on but its grime moodle handler wasn't caught, the console says so at game start, with what to do. Build 42 loads all shared files before all client files, each in mod list order, so a target in another mod's `client/` folder is always caught; a miss means the mod changed.
 - 1.1.2: two fixes from a code review. Walking beside a parked vehicle now rebuilds the loot window on every step, as vanilla does, because which of the vehicle's containers you can reach depends on where you stand next to it; 1.1.1 could skip those steps while the same car squares stayed in reach. And a window class whose `update` calls its parent's (both patched) is only judged once, so the inner call can't hide a move. CleanUI 42.19 doesn't do this (its vanilla-style and clean classes are separate and swapped in as `ISInventoryPage`), so with CleanUI nothing changes there. Checked against the game's own `ISInventoryPage:refreshBackpacks` (42.21): same 3x3 squares, the same `canReachTo` wall check, floor items, corpses, object containers and vehicles. It also hides animal corpses and, in multiplayer only, safehouse loot, which can only make 1.1.2 rebuild more often than needed, never less.
 - 1.1.1: fixes 1.1, which called `next()`, a function the game's Lua doesn't have. Every other mod's `OnPlayerUpdate` handler failed to register, and the files registering them (Combat Text, Gunworks and others) stopped loading at that line. Don't use 1.1.
 - 1.1: Take A Bath And Shower's grime moodle throttle moved here from Hitch Fix.
@@ -25,7 +27,7 @@ Each part has a switch at the top of its file: `ENABLE_LOOT_WINDOW` and `ENABLE_
 Not yet tested in the real game.
 
 ## Install
-Copy `UIThrottle` to `%USERPROFILE%\Zomboid\mods\` and enable "UI Throttle (performance patch)". Its position in the load order doesn't matter. `console.txt` shows `[UIThrottle] caught client/TABAS_BodyGrime.lua` (if you use that mod), then `[UIThrottle] active (1.1.2)` and `[UIThrottle] loot window skips rebuilds when nothing nearby changed` once you load a save.
+Copy `UIThrottle` to `%USERPROFILE%\Zomboid\mods\` and enable "UI Throttle (performance patch)". Its position in the load order doesn't matter. `console.txt` shows `[UIThrottle] caught client/TABAS_BodyGrime.lua` (if you use that mod), then `[UIThrottle] active (1.1.4)` and `[UIThrottle] loot window skips rebuilds when nothing nearby changed` once you load a save.
 
 ## Settings worth changing (no patch needed)
 - **[CHStatusHUD](https://steamcommunity.com/sharedfiles/filedetails/?id=3776182375):** it costs about 830 µs per frame, from drawing 18 rows of icon, bar and text. Your text size of 33 is a native font size on your PC (console: "drawn untouched"), so changing it won't help. Turning off stats you don't need to watch cuts the cost row by row.

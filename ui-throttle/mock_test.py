@@ -46,7 +46,28 @@ ExactMinuteClock={}; clockRuns=0
 function ExactMinuteClock.updateState(self) clockRuns=clockRuns+1 end
 ''')
 L.execute(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'UIThrottle/42/media/lua/client/UIThrottle.lua')).read())
+L.execute(r"""
+PRINTED={}; __rp=print; print=function(s) PRINTED[#PRINTED+1]=tostring(s) end
+MODS={"\\TakeABathAndShowerNew"}
+getActivatedMods=function() return {contains=function(_,id) for _,x in ipairs(MODS) do if x==id then return true end end return false end} end
+""")
 L.execute('for _,f in ipairs(Events.OnGameStart.l) do f() end')
+_m=[s for s in L.eval('PRINTED').values() if 'missed' in s]
+assert len(_m)==1 and 'most likely changed' in _m[0] and 'mod list' not in _m[0], _m
+print("PASS 1.1.4: grime moodle handler missed while the mod is on is named: " + _m[0][:60] + "...")
+L.execute('PRINTED={}; UIThrottleEarly={tabas=true}')
+L.execute('for _,f in ipairs(Events.OnGameStart.l) do f() end')
+L.execute('PRINTED2=PRINTED; UIThrottleEarly=nil; MODS={}; PRINTED={}')
+L.execute('for _,f in ipairs(Events.OnGameStart.l) do f() end')
+_n=[s for s in list(L.eval('PRINTED2').values())+list(L.eval('PRINTED').values()) if 'missed' in s]
+assert not _n, _n
+print("PASS 1.1.3: no missed line when caught, or when the mod is off")
+L.execute('MODS={"TakeABathAndShowerNew"}; UIThrottleEarly={tabasOn=false}; PRINTED={}')
+L.execute('for _,f in ipairs(Events.OnGameStart.l) do f() end')
+_o=[s for s in L.eval('PRINTED').values() if 'missed' in s]
+assert not _o, _o
+print("PASS 1.1.4: no missed line when the moodle part is switched off")
+L.execute('print=__rp')
 L.execute(r'''
 page={player=0,onCharacter=false}
 crates["25,11"]={name="crate"}   -- one crate next to the path at x=25

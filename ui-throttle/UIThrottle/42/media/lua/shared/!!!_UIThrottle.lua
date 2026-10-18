@@ -14,6 +14,7 @@ if UIThrottleEarly then return end
 UIThrottleEarly = {}
 
 local ENABLE_TABAS_MOODLE = true
+UIThrottleEarly.tabasOn = ENABLE_TABAS_MOODLE   -- read by client/UIThrottle.lua's missed check (1.1.4)
 local MOODLE_MS = 250   -- the grime moodle is set at most this often per player
 
 local TABAS_FILE = "client/TABAS_BodyGrime.lua"

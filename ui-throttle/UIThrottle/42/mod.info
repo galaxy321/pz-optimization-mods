@@ -1,5 +1,5 @@
 name=UI Throttle (performance patch)
 id=UIThrottle
 description=Unofficial performance patch. The loot window rebuilds its container list every time you step onto a new square or turn, and every mod listening to that refresh runs too. This patch skips the rebuild when nothing lootable around you changed (an empty street, or moving inside the same vehicle); when something did change it still rebuilds instantly, as vanilla does. It also makes Exact Minute Clock look for your watch 5 times a second instead of on every frame, and sets Take A Bath And Shower's grime moodle 4 times a second instead of on every player update. Works with vanilla UI and CleanUI. Does not modify any other mod's files.
-modversion=1.1.2
+modversion=1.1.4
 versionMin=42.0.0

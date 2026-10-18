@@ -168,8 +168,24 @@ local function install()
 	if ENABLE_CLOCK then throttleClock() end
 end
 
+-- 1.1.3: name the grime moodle handler if Take A Bath And Shower is on but it wasn't caught.
+-- Its file is in client/, which every shared/ file loads before, and the match needs client/,
+-- so a miss means the mod changed. 1.1.4: nothing is said when that part is switched off.
+local TABAS_MOD = "TakeABathAndShowerNew"
+local function modActive(id)
+	local ok, mods = pcall(getActivatedMods)
+	if not ok or not mods then return false end
+	local okC, on = pcall(function() return mods:contains(id) or mods:contains("\\" .. id) end)
+	return okC and on == true
+end
+
 Events.OnGameStart.Add(function()
-	print("[UIThrottle] active (1.1.2)" .. (UIThrottleEarly and UIThrottleEarly.tabas
+	local early = UIThrottleEarly
+	if not (early and (early.tabas or early.tabasOn == false)) and modActive(TABAS_MOD) then
+		print("[UIThrottle] missed client/TABAS_BodyGrime.lua: " .. TABAS_MOD .. " is on but its moodle handler"
+			.. " wasn't caught, so the mod has most likely changed and the moodle is left alone")
+	end
+	print("[UIThrottle] active (1.1.4)" .. (UIThrottleEarly and UIThrottleEarly.tabas
 		and ", Take A Bath And Shower grime moodle throttled" or ""))
 	install()
 end)
