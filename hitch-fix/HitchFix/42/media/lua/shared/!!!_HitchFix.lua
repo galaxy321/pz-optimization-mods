@@ -123,6 +123,12 @@
 --    streams the same chunks in the same order, finds them. The file is used only when LGEE's
 --    cover gives the same answer on a small fixed test as when the file was written.
 --
+-- 1.14: at game start, a target file that wasn't caught while its mod is on is named, with what
+-- to do about it (move Hitch Fix above that mod in the mod list, or the mod changed).
+-- 1.14.1: no miss is reported on a side where the file never registers (LGEE on a multiplayer
+-- client, client/ files on a dedicated server), and the mod list advice is left off where it
+-- can't help. 1.14.2: Better Building Plus is checked on every side, as its file registers there.
+--
 -- 1.13 (review fixes): a caught handler its mod takes off the event (Tuna's racks, AmmoMaker's
 -- clean-up) stops being run, and a re-add runs it once, not twice. The first rack rescan runs
 -- when the game starts instead of 10 s in, so a rack beside you at load works without Chunk
@@ -1322,6 +1328,68 @@ local function onTick()
 	end
 end
 
+-- The mod each caught file belongs to, so a file that wasn't caught while its mod is on can be
+-- named at game start (1.14). Build 42 loads all shared files, then all client files, then all
+-- server files, each in mod list order, so a target in another mod's shared/ folder is caught
+-- only if Hitch Fix sits above that mod in the mod list. Every target here is in client/ or
+-- server/ today, so a miss most likely means the mod changed.
+-- `side` says where the file registers its handler, so no miss is reported where it never
+-- would: "notServer" (client/ files, which a dedicated server doesn't load), "notClient"
+-- (LGEEGrid.lua returns on isClient() before registering), "any" (BBP's registers everywhere,
+-- 1.14.2) and "sp" for files whose source wasn't read. `client` marks a match that requires the client/ folder,
+-- where the mod list order can't matter (1.14.1).
+local WANT_MOD = {
+	["ammomaker_itemCleanUp.lua"] = { id = "ammomaker", side = "sp" },
+	["client/Tuna_WeaponRack.lua"] = { id = "Tuna_GunRacks", side = "notServer", client = true },
+	["client/Tuna_ER_Render.lua"] = { id = "Tuna_EquipmentRacks", side = "notServer", client = true },
+	[TIYL_FILE] = { id = "ThisIsYourLife", side = "sp" },
+	["BetterBuildingPlus/networking/server.lua"] = { id = "BetterBuildingPlus", side = "any" },
+	["LGExtendedElectricity/LGEEGrid.lua"] = { id = "LGExtendedElectricity", side = "notClient" },
+}
+
+local function modActive(id)
+	local ok, mods = pcall(getActivatedMods)
+	if not ok or not mods then return false end
+	local okC, on = pcall(function() return mods:contains(id) or mods:contains("\\" .. id) end)
+	return okC and on == true
+end
+
+local function sideTrue(f)
+	local ok, v = pcall(f)
+	return ok and v == true
+end
+
+local function registersHere(side)
+	local client, server = sideTrue(isClient), sideTrue(isServer)
+	if side == "notServer" then return not server end
+	if side == "notClient" then return not client end
+	if side == "sp" then return not client and not server end
+	return true
+end
+
+local function reportMissed()
+	local seen, missed = {}, {}
+	for _, list in pairs(wants) do
+		for _, w in ipairs(list) do
+			if w.fn then seen[w.file] = true end
+		end
+	end
+	for _, list in pairs(wants) do
+		for _, w in ipairs(list) do
+			local m = WANT_MOD[w.file]
+			if not seen[w.file] and m and registersHere(m.side) and modActive(m.id) then
+				seen[w.file] = true
+				missed[#missed + 1] = w.file
+				say("missed " .. w.file .. ": " .. m.id .. " is on but that handler wasn't caught, so "
+					.. m.id .. " has most likely changed and that part is left alone"
+					.. (m.client and "" or (". If that file is now in " .. m.id
+						.. "'s shared/ folder, moving Hitch Fix above " .. m.id .. " in the mod list would catch it")))
+			end
+		end
+	end
+	return missed
+end
+
 local function onStart()
 	discStart()
 	if dc then discReportAt = getTimestampMs() + PROBE_SECONDS * 1000 end
@@ -1349,7 +1417,8 @@ local function onStart()
 	if dc then caught[#caught + 1] = "LGEE circle covers re-used (" .. (dc.loaded or 0) .. " from file)" end
 	if probe and probe.walkFns then caught[#caught + 1] = "LGEE walk steps (" .. probe.walkFns .. " functions)" end
 	if rc then caught[#caught + 1] = "LGEE structure walks (first minute)" end
-	say("active (1.13), caught: " .. (#caught > 0 and table.concat(caught, ", ") or "nothing")
+	reportMissed()
+	say("active (1.14.2), caught: " .. (#caught > 0 and table.concat(caught, ", ") or "nothing")
 		.. (ChunkLoadSieve and ChunkLoadSieve.watch and "; racks found by Chunk Load Sieve" or "; racks found by rescan only"))
 end
 

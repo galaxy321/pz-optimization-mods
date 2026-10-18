@@ -27,17 +27,20 @@ A second probe (1.6) looks at Exact Minute Clock's `ISCharacterScreen:render` li
 
 1.13 fixes three things found in a code review; nothing else changes. If a mod takes one of the caught handlers off its event (Tuna's rack handlers, AmmoMaker's casing clean-up), Hitch Fix stops running it too; before, it kept calling it, and a re-add ran it twice. Neither Tuna rack mod removes its handler in its current version, so this was latent. The first rack rescan now runs as the game starts instead of 10 s in, so without Chunk Load Sieve a rack right beside you at load is serviced from the first second. And the night-vision answers are forgotten every 10 s (`NV_FORGET_MS`), so a goggle type registered by some other route than the framework's own function is picked up within 10 s; the cost is one full check per worn item type every 10 s.
 
+1.14 names, at game start, any target file it didn't catch while that file's mod is on, as a `missed` line (see below). 1.14.1 leaves out the places where a file never registers its handler, so there is no false line for LG Extended Electricity on a multiplayer client or for the Tuna racks on a dedicated server, and drops the mod list advice where it can't help. 1.14.2 checks Better Building Plus on multiplayer clients too, since its file registers there. Nothing else changes.
+
 ## Install
 
 - Copy `HitchFix` to `Zomboid\mods\` and enable it.
 - Update Chunk Load Sieve to 1.2, which adds `ChunkLoadSieve.watch`. Without 1.2, racks are found only by the rescan, which runs every 10 s.
-- Load order does not matter. The file name `!!!_HitchFix.lua` sorts before the patched mods' files.
+- Mod list order doesn't matter for today's targets. Build 42 loads every mod's `shared/` files first, then every mod's `client/` files, then `server/`, so Hitch Fix (in `shared/`) is always loaded before them. The `!!!_` name only orders files inside one mod. If a target ever moved into its mod's `shared/` folder, Hitch Fix would have to sit above that mod in the mod list, and the `missed` line says so.
 
 ## Check it is working
 
 The console shows:
 - `[HitchFix] caught ...` for each handler it caught.
-- `[HitchFix] active (1.13), caught: ...` (ending in `LGEE circle covers re-used (N from file), LGEE stage timing, LGEE walk steps (N functions)` when LG Extended Electricity is on), `[HitchFix] farming checks spread over ticks` and `[HitchFix] night vision goggle check remembered per item type` when the game starts.
+- `[HitchFix] active (1.14.2), caught: ...` (ending in `LGEE circle covers re-used (N from file), LGEE stage timing, LGEE walk steps (N functions)` when LG Extended Electricity is on), `[HitchFix] farming checks spread over ticks` and `[HitchFix] night vision goggle check remembered per item type` when the game starts.
+- `[HitchFix] missed <file>: <mod> is on but that handler wasn't caught, ...` if a target mod is on but its handler wasn't caught. That mod has most likely changed, and that part is left alone. Nothing is printed for a mod that is off.
 - Every 10 real minutes, a line with the casing, farming, rack and night-vision item type counts.
 
 ## Turn parts off

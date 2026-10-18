@@ -500,7 +500,7 @@ check('lgee stages: time per stage, outside them, relays and pending',
       probe and 'stages: walk 30, setRelays 300, publish 0, fuel line 0, broadcast 0, outside them 10 ms; relays 0 -> 100; another sweep pending: yes' in probe[0])
 check('lgee stages: the last slow tick says nothing is pending', len(probe) == 4 and 'pending: no' in probe[3])
 check('lgee probe: handler still runs and sweep result passes through', L.eval('LGEE_SWEEPS') == 10 and L.eval('LGEE_RESULT') == 'built')
-check('lgee probe: active line says 1.10 and lists LGEE and stage timing', any('active (1.13)' in s and 'LGEEGrid.lua' in s and 'LGEE stage timing' in s for s in out))
+check('lgee probe: active line lists LGEE and stage timing', any('active (1.14.2)' in s and 'LGEEGrid.lua' in s and 'LGEE stage timing' in s for s in out))
 L.execute('for i=1,200 do Events.OnTick.trigger(); advanceClock(1000) end')
 out = list(L.eval('PRINTED').values())
 check('lgee probe: ends after its window and puts LGEE.rebuild back',
@@ -525,7 +525,7 @@ check('lgee walks: asked of the game once in four laps', L.eval('ASKED') == 1)
 check('lgee walks: every lap got the same squares and counts', len(seen) == 4 and len(set(seen)) == 1 and seen[0] == '10,10,0;11,10,0;10,11,0|1,3')
 probe = [s for s in out if 'LGEE probe:' in s]
 check('lgee walks: only the first lap is slow, and its line says so', len(probe) == 1 and 'structure walks: 1 asked (300 ms), 0 from memory' in probe[0])
-check('lgee walks: active line says 1.10 and lists it', any('active (1.13)' in s and 'LGEE structure walks' in s for s in out))
+check('lgee walks: active line lists it', any('active (1.14.2)' in s and 'LGEE structure walks' in s for s in out))
 L.execute('Events.OnObjectAdded.trigger({}); Events.OnTick.trigger(); advanceClock(16)')
 check('lgee walks: forgotten when an object is added', L.eval('ASKED') == 2)
 L.execute('for i=1,70 do Events.OnTick.trigger(); advanceClock(1000) end')
@@ -565,7 +565,7 @@ check("lgee walk steps: the walk's own local time is told apart (20 ms)", m is n
 check('lgee walk steps: first and last calls in order',
       re.search(r'first-last call ms: planCover 0-15, discRegistrations 35-335, squareId 335-4\d\d, advanceRelayDiff 4\d\d-4\d\d', line) is not None)
 check('lgee walk steps: results pass through', L.eval('REGS[2]') == 2 and L.eval('OUTSIDE') == '1,1,1')
-check('lgee walk steps: active line lists it', any('active (1.13)' in s and 'LGEE walk steps (' in s for s in out))
+check('lgee walk steps: active line lists it', any('active (1.14.2)' in s and 'LGEE walk steps (' in s for s in out))
 L.execute('for i=1,200 do Events.OnTick.trigger(); advanceClock(1000) end')
 check('lgee walk steps: every function put back after the probe',
       L.eval('LGEE.squareId == ORIG4[1] and LGEE.planCover == ORIG4[2] and LGEE.discRegistrations ~= HD and LGEE.advanceRelayDiff == ORIG4[4] and LGEE.markStart == ORIG4[5] and LGEE.markEnd == ORIG4[6]'))
@@ -587,7 +587,7 @@ print('   ', probe[0] if probe else out)
 check('lgee circles: covered once in four laps', L.eval('COVERS') == 1)
 check('lgee circles: the line says why it was worked out', probe and 'worked out because circle at 0,0,0,20,4: not seen before' in probe[0])
 check('lgee circles: only the first lap is slow, and its line says so', len(probe) == 1 and 'circle covers: 1 worked out (340 ms), 0 re-used' in probe[0])
-check('lgee circles: active line says 1.11 and lists it', any('active (1.13)' in s and 'LGEE circle covers re-used' in s for s in out))
+check('lgee circles: active line lists it', any('active (1.14.2)' in s and 'LGEE circle covers re-used' in s for s in out))
 n0 = L.eval('LAST_N')
 L.execute('Z = LGEE.discRegistrations(0, 0, 0, 20, 4, canHostForTest)')
 check('lgee circles: re-used answer is a fresh copy (the mark LGEE set on the last one is not in it)',
@@ -628,7 +628,7 @@ L2.execute('''
 ''')
 out = list(L2.eval('PRINTED').values())
 check('lgee circles: next session, both answers come from the file, nothing worked out', L2.eval('COVERS') == 0)
-check('lgee circles: next session, the active line counts them', any('active (1.13)' in s and 'LGEE circle covers re-used (2 from file)' in s for s in out))
+check('lgee circles: next session, the active line counts them', any('active (1.14.2)' in s and 'LGEE circle covers re-used (2 from file)' in s for s in out))
 check('lgee circles: answers from the file are the same registrations, keys rebuilt', L2.eval('LAST_N') == n0 - 1 and L2.eval('LAST[2].key') == L2.eval('LAST[2].x .. "," .. LAST[2].y .. "," .. LAST[2].z'))
 saved2 = saved.replace('HitchFixCircles 1 ', 'HitchFixCircles 1 X', 1)
 L3 = run(False)
@@ -674,6 +674,39 @@ check('charscreen probe: every draw still reaches the original', L.eval('CS_DRAW
 L.execute('for i=1,200 do Events.OnTick.trigger(); advanceClock(1000) end')
 out = list(L.eval('PRINTED').values())
 check('charscreen probe: ends and puts the original back', any('character screen probe done' in s for s in out) and L.eval('ISCharacterScreen.render == ORIG_CS'))
+
+# 1.14: a target that wasn't caught while its mod is on is named at game start.
+# 1.14.1: not on a side where the file never registers, and no mod list advice for client/ matches.
+CASES = (
+    ('singleplayer, AmmoMaker file never loads', 'sp', '{"Tuna_GunRacks", "\\\\ammomaker"}', [GUN],
+     {'ammomaker_itemCleanUp.lua': True}),
+    ('singleplayer, mod that is off or caught', 'sp', '{"Tuna_GunRacks"}', [GUN], {}),
+    ('singleplayer, LGEE and equipment racks never load', 'sp', '{"LGExtendedElectricity", "Tuna_EquipmentRacks"}', [],
+     {'LGExtendedElectricity/LGEEGrid.lua': True, 'client/Tuna_ER_Render.lua': False}),
+    ('multiplayer client, LGEE skips its handler there', 'client', '{"LGExtendedElectricity", "ammomaker"}', [], {}),
+    ('multiplayer client, Better Building Plus never loads', 'client', '{"BetterBuildingPlus"}', [],
+     {'BetterBuildingPlus/networking/server.lua': True}),
+    ('dedicated server, client/ files never load', 'server', '{"Tuna_EquipmentRacks", "Tuna_GunRacks"}', [], {}),
+)
+for label, side, mods, files, want in CASES:
+    L = lupa.LuaRuntime(unpack_returned_tuples=True)
+    L.execute(MOCK)
+    L.execute(f'isClient = function() return {"true" if side == "client" else "false"} end')
+    L.execute(f'isServer = function() return {"true" if side == "server" else "false"} end')
+    L.execute('PRINTED = {}; print = function(s) PRINTED[#PRINTED + 1] = tostring(s) end')
+    L.execute('local m = ' + mods + '; getActivatedMods = function() return {contains = function(_, id) for _, x in ipairs(m) do if x == id then return true end end return false end} end')
+    L.execute(f'dofile([[{FIX}]])')
+    for f in files: L.execute(f'dofile([[{f}]])')
+    L.execute('Events.OnGameStart.trigger()')
+    out = list(L.eval('PRINTED').values())
+    missed = [s for s in out if '] missed ' in s]
+    got = {}
+    for s in missed:
+        name = s.split('] missed ', 1)[1].split(':', 1)[0]
+        got[name] = 'moving Hitch Fix above' in s
+    ok = got == want and all('has most likely changed' in s for s in missed)
+    check(f'missed lines (1.14.1), {label}: {missed if missed else "none"}', ok)
+    if not ok: print('   want', want, 'got', got)
 
 print()
 print('ALL PASS' if not failures else f'{len(failures)} FAILED: {failures}')
