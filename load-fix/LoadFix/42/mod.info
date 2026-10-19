@@ -1,0 +1,5 @@
+name=Load Fix (built into the game)
+id=LoadFix
+description=Unofficial load-time patch, installed into the game folder next to pzopt, so it works without ZombieBuddy. This mod folder only keeps saves that list Load Fix happy; ticking or unticking it changes nothing. To remove Load Fix, run uninstall-loadfix-builtin.ps1.
+modversion=0.6.0
+versionMin=42.0.0

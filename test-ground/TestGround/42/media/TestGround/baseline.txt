@@ -1,0 +1,63 @@
+# Test Ground's fixed baseline, shipped with the mod (media/TestGround/baseline.txt): the same steps,
+# places and roads for every player, on the vanilla map from the fixed start at West Point.
+# Frozen from a survey at 11501,6949 on 16 Oct; the tree road is the best one a tree scan found.
+# To change it, copy it to Zomboid/Lua/, edit, and run that file (bridge "run <file>").
+label = baseline
+settle = 30                # 1.13.7: was 10; unmeasured time for first-run costs before the first step
+repeat = 1
+autostart = 0
+return = 1
+start = westpoint          # West Point, South St (11501,6949,0), the fixed test start; 'here' runs where the save loaded
+time = 12
+weather = clear
+zombies = none
+god = 1
+
+# 1.13.7 (the step name review of 18 Oct): grouped by kind (on foot, glides, car, fights, stress
+# last); the ghost glides are named glide_*; glide_fog is glide_south's twin in fog (same line);
+# corpse setup and clean-up are named setup_/cleanup_ so play metrics can leave them out; the name
+# goes last on every line (the PC's step table takes the last word). compare.py maps the old names.
+step = walk 2 walk
+step = loot loot
+step = drive 60 20 glide_south
+step = drive 40 20 -1 glide_north
+step = weather fog
+step = drive 60 20 glide_fog
+step = weather clear
+step = treeroad 40 20 glide_trees
+step = drivefast 241 120 drive_fast
+# corpses in every chunk along the first 1000 tiles of the fast road, a drive back through them as
+# the chunks load again, then every corpse taken back off
+step = corpses 30 setup_corpses
+step = drivefast 45 120 drive_corpses
+step = corpses clear cleanup_corpses
+step = fight 6 30 fight_small
+step = fight 40 60 fight_large
+step = realfight 6 30 weapon=Base.BaseballBat fight_swing
+step = stress 500 60 stress_500
+
+drive = 0.000,1.000
+route = 11481,6929,0
+route = 11521,6929,0
+route = 11521,6969,0
+route = 11481,6969,0
+loot = 11501,6963,0
+loot = 11502,6963,0
+loot = 11501,6964,0
+loot = 11503,6963,0
+loot = 11501,6965,0
+loot = 11503,6964,0
+treeroad = 12266,9300,0    # Tioga Road, 0.35 trees per tile each side (scanned)
+treeroad = 12266,9450,0
+fastname = Dixie Highway (Route 31W)
+fastwidth = 14
+fastroad = 11678,7191,0
+fastroad = 11662,7204,0
+fastroad = 11644,7232,0
+fastroad = 11644,8701,0
+fastroad = 11629,8731,0
+fastroad = 11610,8750,0
+fastroad = 11582,8764,0
+fastroad = 10681,8764,0
+fastroad = 10592,8858,0
+fastroad = 10592,9813,0

@@ -1,0 +1,5 @@
+{
+    "Sandbox_TestGroundBridge": "Test Ground Bridge",
+    "Sandbox_TestGroundBridge_AllowLua": "Allow lua lines",
+    "Sandbox_TestGroundBridge_AllowLua_tooltip": "Lets the bridge run \"lua\" lines from Zomboid/Lua/TestGround_cmd.txt without -debug. Any program that can write that file can then run Lua in this game. Leave off unless you are building or testing mods on this save."
+}

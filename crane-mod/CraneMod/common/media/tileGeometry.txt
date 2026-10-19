@@ -1,0 +1,341 @@
+tileGeometry
+{
+    VERSION = 2,
+
+    tileset
+    {
+        name = cranemod_winch_e,
+
+        /* cranemod_winch_e_53 */
+        tile
+        {
+            xy = 5x6,
+
+            box
+            {
+                translate = 0x0x0,
+                rotate = 0x0x0,
+                min = -4500x0x-5000,
+                max = 5000x13500x5000,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_winch_w,
+
+        /* cranemod_winch_w_53 */
+        tile
+        {
+            xy = 5x6,
+
+            box
+            {
+                translate = 0x0x0,
+                rotate = 0x0x0,
+                min = -4500x0x-5000,
+                max = 5000x13500x5000,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_winch_s,
+
+        /* cranemod_winch_s_52 */
+        tile
+        {
+            xy = 4x6,
+
+            box
+            {
+                translate = 0x0x0,
+                rotate = 0x0x0,
+                min = -5000x0x-4500,
+                max = 5000x13500x5000,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_winch_n,
+
+        /* cranemod_winch_n_52 */
+        tile
+        {
+            xy = 4x6,
+
+            box
+            {
+                translate = 0x0x0,
+                rotate = 0x0x0,
+                min = -5000x0x-4500,
+                max = 5000x13500x5000,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_column_e,
+
+        /* cranemod_column_e_48 */
+        tile
+        {
+            xy = 0x6,
+
+            box
+            {
+                translate = 3709x0x3920,
+                rotate = 0x0x0,
+                min = -1291x0x-1080,
+                max = 1291x24495x1080,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_column_w,
+
+        /* cranemod_column_w_48 */
+        tile
+        {
+            xy = 0x6,
+
+            box
+            {
+                translate = 3709x0x3920,
+                rotate = 0x0x0,
+                min = -1291x0x-1080,
+                max = 1291x24495x1080,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_column_s,
+
+        /* cranemod_column_s_48 */
+        tile
+        {
+            xy = 0x6,
+
+            box
+            {
+                translate = 3709x0x3920,
+                rotate = 0x0x0,
+                min = -1291x0x-1080,
+                max = 1291x24495x1080,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_column_n,
+
+        /* cranemod_column_n_48 */
+        tile
+        {
+            xy = 0x6,
+
+            box
+            {
+                translate = 3709x0x3920,
+                rotate = 0x0x0,
+                min = -1291x0x-1080,
+                max = 1291x24495x1080,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_box,
+
+        /* cranemod_box_19 */
+        tile
+        {
+            xy = 3x2,
+
+            box
+            {
+                translate = 72x0x78,
+                rotate = 0x0x0,
+                min = -4434x0x-4311,
+                max = 4434x5595x4311,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_boxhang,
+
+        /* cranemod_boxhang_19 */
+        tile
+        {
+            xy = 3x2,
+
+            box
+            {
+                translate = 72x0x78,
+                rotate = 0x0x0,
+                min = -4434x0x-4311,
+                max = 4434x5595x4311,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_hang_e,
+
+        /* cranemod_hang_e_0 */
+        tile
+        {
+            xy = 0x0,
+
+            box
+            {
+                translate = 72x0x78,
+                rotate = 0x0x0,
+                min = -4434x0x-4311,
+                max = 4434x5595x4311,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_hang_w,
+
+        /* cranemod_hang_w_0 */
+        tile
+        {
+            xy = 0x0,
+
+            box
+            {
+                translate = 72x0x78,
+                rotate = 0x0x0,
+                min = -4434x0x-4311,
+                max = 4434x5595x4311,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_hang_s,
+
+        /* cranemod_hang_s_0 */
+        tile
+        {
+            xy = 0x0,
+
+            box
+            {
+                translate = 72x0x78,
+                rotate = 0x0x0,
+                min = -4434x0x-4311,
+                max = 4434x5595x4311,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+    tileset
+    {
+        name = cranemod_hang_n,
+
+        /* cranemod_hang_n_0 */
+        tile
+        {
+            xy = 0x0,
+
+            box
+            {
+                translate = 72x0x78,
+                rotate = 0x0x0,
+                min = -4434x0x-4311,
+                max = 4434x5595x4311,
+            }
+
+            properties
+            {
+                Translucent = true,
+            }
+        }
+    }
+
+}

@@ -1,0 +1,18 @@
+# Test Ground gear check (1.13.2), shipped with the mod (media/TestGround/gear.txt): for Hitch Fix's
+# night-vision cache and UI Throttle's loot window. At night at the fixed start: standing still,
+# night-vision goggles on and off every 3 s, then single steps along a parked car with the loot
+# window listing its containers at each step. Run it with bridge "run mod:gear" or autorun
+# "plan = mod:gear".
+label = gear
+settle = 10
+repeat = 1
+return = 1
+start = westpoint
+time = 23
+weather = clear
+zombies = none
+god = 1
+
+step = idle 15 gear_still
+step = goggles 30 3 goggles        # item=<id> to name the goggles; default: the first one the game knows
+step = carloot 30 6 car_loot

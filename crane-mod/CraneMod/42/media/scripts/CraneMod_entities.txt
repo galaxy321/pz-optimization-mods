@@ -1,0 +1,107 @@
+module Base
+{
+    entity CraneMod_Winch
+    {
+        component UiConfig
+        {
+            xuiSkin = default,
+            entityStyle = ES_CraneMod_Winch,
+            uiEnabled = false,
+        }
+        component SpriteConfig
+        {
+            OnCreate = CraneMod.Build.OnCreateWinch,
+            OnIsValid = CraneMod.Build.OnIsValidWinch,
+            health = 400,
+            skillBaseHealth = 50,
+            face E
+            {
+                layer
+                {
+                    row = cranemod_winch_e_53 cranemod_column_e_48,
+                }
+            }
+            face W
+            {
+                layer
+                {
+                    row = cranemod_column_w_48 cranemod_winch_w_53,
+                }
+            }
+            face S
+            {
+                layer
+                {
+                    row = cranemod_winch_s_52,
+                    row = cranemod_column_s_48,
+                }
+            }
+            face N
+            {
+                layer
+                {
+                    row = cranemod_column_n_48,
+                    row = cranemod_winch_n_52,
+                }
+            }
+        }
+        component CraftRecipe
+        {
+            OnAddToMenu = CraneMod_WinchMenuTest,
+            timedAction = BuildMetalStructureMedium,
+            time = 250,
+            category = Welding,
+            xpAward = MetalWelding:40,
+            Tooltip = Tooltip_craft_CraneMod_WinchDesc,
+            inputs
+            {
+                item 6 [Base.BlowTorch] flags[DontRecordInput],
+                item 1 [Base.HeavyChain_Hook],
+                item 4 [Base.MetalPipe],
+                item 1 [Base.SheetMetal],
+                item 2 [Base.SmallSheetMetal],
+                item 6 [Base.WeldingRods] flags[DontRecordInput],
+            }
+        }
+    }
+
+    entity CraneMod_Box
+    {
+        component UiConfig
+        {
+            xuiSkin = default,
+            entityStyle = ES_CraneMod_Box,
+            uiEnabled = false,
+        }
+        component SpriteConfig
+        {
+            OnCreate = CraneMod.Build.OnCreateBox,
+            OnIsValid = CraneMod.Build.OnIsValidBox,
+            health = 200,
+            skillBaseHealth = 20,
+            face W
+            {
+                layer
+                {
+                    row = cranemod_box_19,
+                }
+            }
+        }
+        component CraftRecipe
+        {
+            OnAddToMenu = CraneMod_BoxMenuTest,
+            timedAction = BuildWoodenStructureMedium,
+            time = 200,
+            category = Carpentry,
+            xpAward = Woodwork:30,
+            Tooltip = Tooltip_craft_CraneMod_BoxDesc,
+            inputs
+            {
+                item 1 tags[base:hammer] mode:keep flags[Prop1;MayDegradeVeryLight],
+                item 4 [Base.Plank],
+                item 4 [Base.Nails],
+                item 1 [Base.Rope],
+            }
+        }
+    }
+}

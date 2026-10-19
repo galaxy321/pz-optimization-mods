@@ -1,0 +1,6 @@
+name=Crane
+id=CraneMod
+description=A welded winch and a wooden box that lift your stuff from the ground floor to the floor above.
+modversion=0.2.0
+versionMin=42.0.0
+tiledef=cranemod 7341

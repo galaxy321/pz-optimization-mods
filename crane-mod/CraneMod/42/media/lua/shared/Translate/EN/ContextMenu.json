@@ -1,0 +1,14 @@
+{
+    "ContextMenu_Crane_Raise": "Raise Crane Box",
+    "ContextMenu_Crane_Lower": "Lower Crane Box",
+    "ContextMenu_Crane_LoadTooltip": "Load: %1",
+    "ContextMenu_Crane_Upstairs": "Use the winch upstairs.",
+    "ContextMenu_Crane_NoBox": "Crane Box Not Built",
+    "ContextMenu_Crane_NoBoxTooltip": "Build the Crane Box from the build menu (Furniture), on the hook below the winch.",
+    "ContextMenu_Crane_RestoreHook": "Restore Crane Hook",
+    "ContextMenu_Crane_Dismantle": "Dismantle Crane",
+    "ContextMenu_Crane_DismantleUp": "Lower the box first.",
+    "ContextMenu_Crane_DismantleNotEmpty": "Empty the box first.",
+    "ContextMenu_Crane_DebugAnim": "Debug: Test Animation",
+    "ContextMenu_Crane_DebugSound": "Debug: Test Sound"
+}

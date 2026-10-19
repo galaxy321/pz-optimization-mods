@@ -1,0 +1,31 @@
+VERSION = 1,
+
+option Crane.BoxCapacity
+{
+	type = integer, min = 10, max = 1000, default = 100,
+	page = Crane, translation = Crane_BoxCapacity,
+}
+
+option Crane.WinchWeldingLevel
+{
+	type = integer, min = 0, max = 10, default = 3,
+	page = Crane, translation = Crane_WinchWeldingLevel,
+}
+
+option Crane.BoxWoodworkLevel
+{
+	type = integer, min = 0, max = 10, default = 3,
+	page = Crane, translation = Crane_BoxWoodworkLevel,
+}
+
+option Crane.CrankBaseTime
+{
+	type = integer, min = 10, max = 2000, default = 100,
+	page = Crane, translation = Crane_CrankBaseTime,
+}
+
+option Crane.CrankTimePerWeight
+{
+	type = double, min = 0.0, max = 100.0, default = 3.0,
+	page = Crane, translation = Crane_CrankTimePerWeight,
+}

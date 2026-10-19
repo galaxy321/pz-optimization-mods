@@ -1,0 +1,16 @@
+module Base
+{
+    xuiSkin default
+    {
+        entity ES_CraneMod_Winch
+        {
+            DisplayName = IGUI_CraneMod_Winch,
+            Icon = CraneMod_Winch,
+        }
+        entity ES_CraneMod_Box
+        {
+            DisplayName = IGUI_CraneMod_Box,
+            Icon = CraneMod_Box,
+        }
+    }
+}

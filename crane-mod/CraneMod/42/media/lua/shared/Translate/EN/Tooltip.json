@@ -1,0 +1,4 @@
+{
+    "Tooltip_craft_CraneMod_WinchDesc": "A welded winch on the edge of an upper floor. The rope drops past the edge to the floor below. Needs Metalworking 3 by default (sandbox option); below that the placement stays red.",
+    "Tooltip_craft_CraneMod_BoxDesc": "A box that hangs from a crane winch. Build it on the crane's hook on the floor below. Needs Carpentry 3 by default (sandbox option); below that the placement stays red."
+}
