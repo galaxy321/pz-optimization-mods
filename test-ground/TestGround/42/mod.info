@@ -1,5 +1,0 @@
-name=Test Ground (dev tool)
-id=TestGround
-description=Dev tool for measuring and checking patches. Runs a fixed test plan (Zomboid/Lua/TestGround_plan.txt) in a singleplayer save: sets the scene (start spot, time, weather, zombies), then walks a route, sweeps a road at driving speed, idles, turns, waits through in-game time and runs Walk To cases, writing frame times, Lua Event Profiler costs per step and a behaviour log to Zomboid/Lua/. Right-click > Test Ground to run or to record spots. Changes the save it runs in, so use a copy.
-modversion=1.13.22
-versionMin=42.0.0

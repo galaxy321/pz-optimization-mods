@@ -1,9 +1,0 @@
-VERSION = 1,
-
-option TestGroundBridge.AllowLua
-{
-	type = boolean,
-	default = false,
-	page = TestGroundBridge,
-	translation = TestGroundBridge_AllowLua,
-}

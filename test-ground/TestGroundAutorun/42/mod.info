@@ -1,6 +1,0 @@
-name=Test Ground Autorun (dev tool)
-id=TestGroundAutorun
-description=Dev tool. Does nothing unless Zomboid/Lua/TestGround_autorun.txt names a save. Then it loads that save from the main menu, runs a Test Ground plan in it, writes Zomboid/Lua/TestGround_autorun_done.txt and quits to desktop. With newsave = <name> it makes a fresh Sandbox save first (vanilla, or with the mods the flag names). Needs Test Ground in the save. Enable it in the main menu's mod list and in the test save's mod list.
-modversion=1.5.1
-require=\TestGround,\TestGroundBridge
-versionMin=42.0.0

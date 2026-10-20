@@ -1,8 +1,0 @@
-# Test Ground structure: a two-floor wooden shell, for tests that need an upper floor (crane mod).
-# One piece per line, coordinates from the site's north-west corner (x east, y south, z floor).
-# Use in a plan: step = build mod:shell2 600 shell   (with buildspeed = fast or instant when it's only the setting)
-woodwork = 6                    # BBP's wood stairs need 6 with sandbox Progression off
-floor 0,0,0 4x3                 # ground floor
-walls 0,0,0 4x3 door=south      # walls round it, door in the middle of the south side
-floor 0,0,1 4x3                 # upper floor
-stairs 4,2,0 north              # wood stairs outside the east wall, up to the north
